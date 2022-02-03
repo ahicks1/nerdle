@@ -1,0 +1,27 @@
+.Guess-Field {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5pt;
+}
+
+
+.Correct {
+    background-color: rgb(21, 136, 21);
+}
+.SemiCorrect {
+    background-color: rgb(141, 132, 0);
+}
+.Unknown {
+    background-color: #181a1f;
+}
+
+.Letter {
+    margin-bottom: 5pt;
+    padding: 10pt;
+    width: 20pt;
+    height: 30pt;
+    border-width: 0pt 4pt 4pt 0pt;
+    /* border-color: rgb(15, 15, 15); */
+    border-color: #1d2025;
+    border-style: solid;
+}
