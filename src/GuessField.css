@@ -11,8 +11,11 @@
 .SemiCorrect {
     background-color: rgb(141, 132, 0);
 }
+.Wrong {
+    background-color: #181a1f
+}
 .Unknown {
-    background-color: #181a1f;
+    background-color: #505868;
 }
 
 .Letter {
@@ -24,4 +27,8 @@
     /* border-color: rgb(15, 15, 15); */
     border-color: #1d2025;
     border-style: solid;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
 }
