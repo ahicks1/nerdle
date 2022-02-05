@@ -1,23 +1,28 @@
 import './App.css';
-import Keyboard from './Keyboard';
-import GuessField from './GuessField';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import MainGame from './MainGame';
+import getWordSet from './getWordSet';
+import { cleanString } from './gameLogic';
 
 function App() {
-  const answer = "MOIST"
-  const [pastGuesses, setPastGuesses] = useState([""]);
-  const handleSubmit = () => {
-    if(pastGuesses.at(-1).length == 5 && pastGuesses.length <= 6) {
-      setPastGuesses([...pastGuesses,""]);
+  const validGuesses = getWordSet();
+  const [answer, setAnswer] = useState(() => {
+    const saved = localStorage.getItem("word");
+    const initialValue = saved;
+    return initialValue || "MOIST";
+  })
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const newWord = queryParams.get('newGame');
+    if(newWord && validGuesses.has(cleanString(newWord))) {
+      localStorage.setItem('word', cleanString(newWord) );
+      window.location.search = '';
     }
-  }
+  })
   return (
     <div className="App">
       <header className="App-header">
-          {[...Array(6).keys()].map(i => {
-            return <GuessField guess={pastGuesses[i]??""} answer={answer} submitted={pastGuesses.length-1>i} key={`GuessField ${i}`} />
-          })}
-          <Keyboard answer={answer} guesses={pastGuesses} onChange={g => setPastGuesses([...pastGuesses.slice(0, pastGuesses.length-1),g])} onSubmit={handleSubmit} />
+        <MainGame answer={answer} validGuesses={validGuesses}/>
       </header>
     </div>
   );

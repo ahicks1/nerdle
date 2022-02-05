@@ -25,3 +25,15 @@ export function getGuessStates(guess, answer) {
     })
     return states;
 }
+
+/**
+ * Takes a string and returns at most 5 uppercase alphabetic characters
+ * @param {String} string 
+ * @returns 
+ */
+export function cleanString(string) {
+    return string
+        .toUpperCase()
+        .replace(/[^A-Z]/g, '')
+        .substring(0,5)
+}

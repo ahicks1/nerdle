@@ -1,32 +1,28 @@
 import './Keyboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackspace, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { getGuessStates } from './gameLogic'
+import { getGuessStates, cleanString } from './gameLogic'
 import GuessState from './utils/GuessState'
 
 /**
- * Takes a string and returns at most 5 uppercase alphabetic characters
- * @param {String} string 
- * @returns 
+ * 
+ * @param {String[]} guesses 
+ * @param {String} answer 
+ * @returns {Map<String, GuessState>}
  */
- function cleanString(string) {
-    return string
-        .toUpperCase()
-        .replace(/[^A-Z]/g, '')
-        .substring(0,5)
-  }
-
 function getLetterStates(guesses, answer) {
     const states = guesses.slice(0, -1).map(g => getGuessStates(g, answer).map( (s,i) => [g[i], s])).flat();
-    const letterStates = {};
+    const letterStates = new Map();
     states.forEach(([letter, state]) => {
         switch(state) {
             case GuessState.Wrong:
-                if(letterStates[letter] !== undefined) break;
+                if(letterStates.has(letter)) break;
+                // falls through
             case GuessState.SemiCorrect:
-                if(letterStates[letter] === GuessState.Correct) break;
+                if(letterStates.get(letter) === GuessState.Correct) break;
+                // falls through
             default:
-                letterStates[letter] = state;
+                letterStates.set(letter, state);
         }
     });
     return letterStates;
@@ -35,11 +31,11 @@ function getLetterStates(guesses, answer) {
 function Keyboard({guesses, answer, onChange, onSubmit}) {
     const letterStates = getLetterStates(guesses, answer)
 
-    const constructRow = row => [...row].map(l => <Letter key={`KeyboardLetter ${l}`} letter={l} letterState={letterStates[l]} onClick={l => onChange(cleanString(guesses.at(-1)+l))} />)
+    const constructRow = row => [...row].map(l => <Letter key={`KeyboardLetter ${l}`} letter={l} letterState={letterStates.get(l)} onClick={l => onChange(cleanString(guesses[guesses.length-1]+l))} />)
     const topRow = constructRow("QWERTYUIOP");
     const middleRow = constructRow("ASDFGHJKL");
     const bottomRow = constructRow("ZXCVBNM");
-    const backspace = () => onChange(guesses.at(-1).slice(0,-1));
+    const backspace = () => onChange(guesses[guesses.length-1].slice(0,-1));
     
     
     return (<div>
