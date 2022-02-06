@@ -1,5 +1,6 @@
 {
   "name": "nerdle",
+  "homepage": "https://ahicks1.github.io/nerdle/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
