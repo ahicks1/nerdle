@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "buffer": "^6.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -21,9 +22,16 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "rules": {
+      "max-len":"warn",
+      "max-depth":"warn"
+    },
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended"
     ]
   },
   "browserslist": {

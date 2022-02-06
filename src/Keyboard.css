@@ -8,8 +8,8 @@
 
     margin: 2pt;
     padding: 5pt;
-    width: 14pt;
-    height: 20pt;
+    width: 16pt;
+    height: 22pt;
     border-radius: 4pt;
 
     display: flex;
@@ -21,6 +21,11 @@
     font-size: 10pt;
     grid-row: 1;
     cursor: pointer;
+}
+
+.WideKeyboardLetter {
+    width: 30pt;
+    align-items: center;
 }
 
 .KeyboardRow {
