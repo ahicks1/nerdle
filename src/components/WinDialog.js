@@ -1,4 +1,4 @@
-import { getShareText } from './gameLogic';
+import { getShareText } from '../utils/gameLogic';
 import './WinDialog.css'
 import React from 'react'
 import PropTypes from 'prop-types';

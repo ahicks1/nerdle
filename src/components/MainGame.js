@@ -2,16 +2,27 @@ import Keyboard from './Keyboard';
 import GuessField from './GuessField';
 import React from 'react';
 import PropTypes from 'prop-types';
-import useStorageState from './utils/useStorageState';
-import { encodeWord } from './gameLogic';
+import { 
+  getNewGameId, 
+  createGameString, 
+  parseGameString } from '../utils/gameLogic';
+import { 
+  useChangeCurrentGame, 
+  useCurrentGameState } from '../utils/gameStateTools';
+import GameHeader from './GameHeader';
 
 /**
  * 
  * @param {object} props 
  * @returns 
  */
-function MainGame({answer, validGuesses, onWin}) {
-  const [guesses, setGuesses, resetGuesses] = useStorageState('gameState',['']);
+function MainGame({validGuesses, onWin}) {
+  const [
+    {guessState:guesses, answer}, 
+    setGuesses
+  ] = useCurrentGameState();
+
+  const [, changeGameId] = useChangeCurrentGame();
 
   const isValidGuess = guess => { 
     return guess.length === 5 && 
@@ -21,11 +32,14 @@ function MainGame({answer, validGuesses, onWin}) {
 
   const handleSubmit = () => {
     const currentGuess = guesses[guesses.length-1];
-    console.log(encodeWord(currentGuess))
+    const gameString = createGameString(getNewGameId(),currentGuess);
+    console.log(gameString)
+    console.log(parseGameString(gameString))
+
     if (isValidGuess(currentGuess)) {
       if (currentGuess === answer || guesses.length === 6) {
-        resetGuesses()
-        onWin(guesses, answer)
+        onWin(guesses, answer);
+        setGuesses([...guesses,'']);
       } else {
         // Add a new blank guess to guesses
         setGuesses([...guesses,'']);
@@ -46,6 +60,8 @@ function MainGame({answer, validGuesses, onWin}) {
   );
   
   return (
+    <div>
+      <GameHeader onBack={() => changeGameId('')}/>
     <div className="MainGame">
         {guessRows}
         <Keyboard 
@@ -54,12 +70,13 @@ function MainGame({answer, validGuesses, onWin}) {
             onChange={updateGuesses} 
             onSubmit={handleSubmit} />
     </div>
+    </div>
   );
 }
 MainGame.propTypes = {
-  answer: PropTypes.string.isRequired,
   validGuesses: PropTypes.instanceOf(Set).isRequired,
-  onWin: PropTypes.func
+  onWin: PropTypes.func,
+  gameId: PropTypes.string
 }
 
 export default MainGame;

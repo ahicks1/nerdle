@@ -2,8 +2,8 @@ import './Keyboard.css'
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackspace, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { getGuessStates, cleanString } from './gameLogic'
-import GuessState from './utils/GuessState'
+import { getGuessStates, cleanString } from '../utils/gameLogic'
+import GuessState from '../utils/GuessState'
 import PropTypes from 'prop-types';
 
 /**
@@ -85,10 +85,10 @@ Keyboard.propTypes = {
 
 /**
  * 
- * @param {Object} param0
- * @param {String} param0.letter
- * @param {Function} param0.onClick
- * @param {GuessState} param0.letterState
+ * @param {Object} props
+ * @param {String} props.letter
+ * @param {Function} props.onClick
+ * @param {GuessState} props.letterState
  * @returns 
  */
 function KeyboardLetter({letter, onClick, letterState=GuessState.Unknown}) {

@@ -1,7 +1,7 @@
 import './GuessField.css'
 import React from 'react';
-import { getGuessStates } from './gameLogic';
-import GuessState from './utils/GuessState';
+import { getGuessStates } from '../utils/gameLogic';
+import GuessState from '../utils/GuessState';
 import PropTypes from 'prop-types';
 
 /**
