@@ -4,12 +4,12 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import ShareButton from './ShareButton';
 
-function WinDialog({isOpen, onClose, guesses}) {
+function WinDialog({isOpen, onClose, guesses, answer}) {
 
   const text = isOpen?
       getShareText(
         guesses.slice(0, guesses.length-1),
-        guesses[guesses.length-2]):
+        answer):
       "";
   const className = `Modal ${(isOpen?"ModalOpen":"ModalClosed")}`;
 
@@ -23,7 +23,8 @@ function WinDialog({isOpen, onClose, guesses}) {
 WinDialog.propTypes = {
     isOpen: PropTypes.bool,
     onClose: PropTypes.func,
-    guesses: PropTypes.arrayOf(PropTypes.string)
+    guesses: PropTypes.arrayOf(PropTypes.string),
+    answer: PropTypes.string
 }
 
 export default WinDialog;
