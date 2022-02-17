@@ -68,7 +68,8 @@ function MainGame({validGuesses}) {
       <WinDialog
         isOpen={wonModalOpen}
         onClose={() => setWonModalOpen(false)}
-        guesses={guesses}/>
+        guesses={guesses}
+        answer={answer}/>
       <GameHeader onBack={() => changeGameId('')}/>
     <div className="MainGame">
         {guessRows}
