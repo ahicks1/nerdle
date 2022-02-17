@@ -1,5 +1,5 @@
 import './Keyboard.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackspace, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { getGuessStates, cleanString } from '../utils/gameLogic'
@@ -48,7 +48,23 @@ function getLetterStates(guesses, answer) {
  */
 function Keyboard({guesses, answer, onChange, onSubmit}) {
   const letterStates = getLetterStates(guesses, answer)
+  const handleKeyDown = e => {
+    switch(e.key) {
+      case 'Backspace':
+        onChange(guesses[guesses.length-1].slice(0,-1));
+        break;
+      case 'Enter':
+        onSubmit();
+        break;
+      default:
+        onChange(cleanString(guesses[guesses.length-1]+e.key));
+    }
+  }
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  })
   const constructRow = row => [...row].map(l => <KeyboardLetter 
     key={`KeyboardLetter ${l}`} 
     letter={l} 
@@ -60,7 +76,6 @@ function Keyboard({guesses, answer, onChange, onSubmit}) {
   const middleRow = constructRow('ASDFGHJKL');
   const bottomRow = constructRow('ZXCVBNM');
   const backspace = () => onChange(guesses[guesses.length-1].slice(0,-1));
-  
   
   return (<div>
     <div className='KeyboardRow'>{topRow}</div>
