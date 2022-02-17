@@ -1,11 +1,13 @@
 import Keyboard from './Keyboard';
 import GuessField from './GuessField';
-import React from 'react';
+import WinDialog from './WinDialog';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { 
   getNewGameId, 
   createGameString, 
-  parseGameString } from '../utils/gameLogic';
+  parseGameString,
+  isGameOver } from '../utils/gameLogic';
 import { 
   useChangeCurrentGame, 
   useCurrentGameState } from '../utils/gameStateTools';
@@ -21,8 +23,10 @@ function MainGame({validGuesses, onWin}) {
     {guessState:guesses, answer}, 
     setGuesses
   ] = useCurrentGameState();
+  const gameOver = isGameOver(guesses, answer);
 
   const [, changeGameId] = useChangeCurrentGame();
+  const [wonModalOpen, setWonModalOpen] = useState(gameOver);
 
   const isValidGuess = guess => { 
     return guess.length === 5 && 
@@ -39,6 +43,7 @@ function MainGame({validGuesses, onWin}) {
     if (isValidGuess(currentGuess)) {
       if (currentGuess === answer || guesses.length === 6) {
         onWin(guesses, answer);
+        setWonModalOpen(true)
         setGuesses([...guesses,'']);
       } else {
         // Add a new blank guess to guesses
@@ -49,7 +54,7 @@ function MainGame({validGuesses, onWin}) {
   
   const updateGuesses = newGuess => {
     // Drop the current most recent guess and replace it with newGuess
-    setGuesses([...guesses.slice(0, guesses.length-1), newGuess])
+    if(!gameOver) setGuesses([...guesses.slice(0, guesses.length-1), newGuess])
   }
 
   const guessRows = [...Array(6).keys()].map(i => <GuessField
@@ -61,6 +66,10 @@ function MainGame({validGuesses, onWin}) {
   
   return (
     <div>
+      <WinDialog
+        isOpen={wonModalOpen}
+        onClose={() => setWonModalOpen(false)}
+        guesses={guesses}/>
       <GameHeader onBack={() => changeGameId('')}/>
     <div className="MainGame">
         {guessRows}

@@ -2,19 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './GameList.css'
 import { getGameFromLocalStorage } from '../utils/gameStateTools';
+import NewGameButton from './NewGameButton';
 
-function GameList({games, onSelect}) {
+
+function GameList({games, onSelect, wordList}) {
     console.log(games)
     const gameEntries = games
     .map(({gameId},i) => <GameListEntry 
     key={`GLE${i}`} 
     onSelect={onSelect}
     gameName={gameId} />);
-    return <div className="GameList" onSelect={onSelect}>{gameEntries}</div>
+    return <div className="GameList">
+        {gameEntries}
+        <NewGameButton wordList={wordList}/>
+        </div>
 }
 GameList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object),
-    onSelect: PropTypes.func
+    onSelect: PropTypes.func,
+    wordList: PropTypes.instanceOf(Set),
 }
 
 function computeGameStateColor({answer, guessState}) {

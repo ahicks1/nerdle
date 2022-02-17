@@ -2,36 +2,28 @@ import { getShareText } from '../utils/gameLogic';
 import './WinDialog.css'
 import React from 'react'
 import PropTypes from 'prop-types';
+import ShareButton from './ShareButton';
 
-function WinDialog({isOpen}) {
+function WinDialog({isOpen, onClose, guesses}) {
 
   const text = isOpen?
-      getShareText(isOpen.slice(0, isOpen.length-1), isOpen[isOpen.length-1]):
+      getShareText(
+        guesses.slice(0, guesses.length-1),
+        guesses[guesses.length-2]):
       "";
+  const className = `Modal ${(isOpen?"ModalOpen":"ModalClosed")}`;
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        text
-      }).then(() => {
-        console.log('Thanks for sharing!');
-      })
-      .catch(console.error);
-    } else {
-      // TODO: Fallback 
-    }
-  }
-  const className = `Modal ${(isOpen!==undefined?"ModalOpen":"ModalClosed")}`;
-
-  return <div className={className}>
-    <div className="ModalContent">
+  return <div className={className} onClick={onClose} >
+    <div className="ModalContent" onClick={e => e.stopPropagation()}>
       <pre>{text}</pre>
-      <button onClick={handleShare}>Share</button>
+      <ShareButton shareText={text} shareType='text'/>
     </div>
   </div>
 }
 WinDialog.propTypes = {
-    isOpen: PropTypes.arrayOf(PropTypes.string)
+    isOpen: PropTypes.bool,
+    onClose: PropTypes.func,
+    guesses: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default WinDialog;

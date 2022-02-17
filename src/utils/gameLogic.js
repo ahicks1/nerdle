@@ -1,5 +1,6 @@
 import GuessState from "./GuessState";
 import { Buffer } from 'buffer'
+import {v4 as uuidv4} from 'uuid';
 
 import words from '../resources/words.json'
 /**
@@ -21,7 +22,7 @@ export function decodeWord(word) {
 }
 
 export function getNewGameId() {
-    return Buffer.from(crypto.randomUUID(), 'hex').toString('base64')
+    return Buffer.from(uuidv4(), 'hex').toString('base64')
 }
 
 export function getWordSet() {
@@ -47,6 +48,11 @@ export function parseGameString(rawString) {
  */
 export function createGameString(gameId,word) {
     return gameId+encodeWord(word)
+}
+
+export function getShareGameLink(word) {
+    return `${window.location.href}?newGame=` +
+    `${createGameString(getNewGameId(),word)}`
 }
 
 /**
@@ -81,6 +87,12 @@ export function getGuessStates(guess, answer) {
         }
     })
     return states;
+}
+
+export function isGameOver(guesses, answer) {
+    if(guesses.length < 2) return false;
+    const currentGuess = guesses[guesses.length-2];
+    return currentGuess === answer || guesses.length === 7
 }
 
 /**
