@@ -18,7 +18,7 @@ import GameHeader from './GameHeader';
  * @param {object} props 
  * @returns 
  */
-function MainGame({validGuesses, onWin}) {
+function MainGame({validGuesses}) {
   const [
     {guessState:guesses, answer}, 
     setGuesses
@@ -42,7 +42,6 @@ function MainGame({validGuesses, onWin}) {
 
     if (isValidGuess(currentGuess)) {
       if (currentGuess === answer || guesses.length === 6) {
-        onWin(guesses, answer);
         setWonModalOpen(true)
         setGuesses([...guesses,'']);
       } else {
@@ -84,7 +83,6 @@ function MainGame({validGuesses, onWin}) {
 }
 MainGame.propTypes = {
   validGuesses: PropTypes.instanceOf(Set).isRequired,
-  onWin: PropTypes.func,
   gameId: PropTypes.string
 }
 
