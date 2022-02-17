@@ -1,6 +1,8 @@
-import GuessState from "./utils/GuessState";
+import GuessState from "./GuessState";
 import { Buffer } from 'buffer'
+import {v4 as uuidv4} from 'uuid';
 
+import words from '../resources/words.json'
 /**
  * Encode UTF-8 string into base64
  * @param {string} word 
@@ -17,6 +19,40 @@ export function encodeWord(word) {
  */
 export function decodeWord(word) {
     return Buffer.from(word, 'base64').toString();
+}
+
+export function getNewGameId() {
+    return Buffer.from(uuidv4(), 'hex').toString('base64')
+}
+
+export function getWordSet() {
+    return new Set(words);
+}
+
+/**
+ * 
+ * @param {string} rawString 
+ */
+export function parseGameString(rawString) {
+    return {
+        gameId: rawString.slice(0,24),
+        answer: decodeWord(rawString.slice(24))
+    }
+}
+
+/**
+ * 
+ * @param {Object} param0
+ *  
+ * @returns 
+ */
+export function createGameString(gameId,word) {
+    return gameId+encodeWord(word)
+}
+
+export function getShareGameLink(word) {
+    return `${window.location.href}?newGame=` +
+    `${createGameString(getNewGameId(),word)}`
 }
 
 /**
@@ -51,6 +87,12 @@ export function getGuessStates(guess, answer) {
         }
     })
     return states;
+}
+
+export function isGameOver(guesses, answer) {
+    if(guesses.length < 2) return false;
+    const currentGuess = guesses[guesses.length-2];
+    return currentGuess === answer || guesses.length === 7
 }
 
 /**

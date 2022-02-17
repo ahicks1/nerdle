@@ -1,0 +1,13 @@
+.GameList {
+    padding-top: 20pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:flex-start;
+  }
+
+.GameListEntry {
+    margin: 2pt;
+    padding: 20pt;
+    width: 400pt;
+}

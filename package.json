@@ -14,6 +14,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -24,13 +25,12 @@
   },
   "eslintConfig": {
     "rules": {
-      "max-len":"warn",
-      "max-depth":"warn"
+      "max-len": "warn",
+      "max-depth": "warn"
     },
     "extends": [
       "react-app",
       "react-app/jest",
-      "eslint:recommended",
       "plugin:react/recommended",
       "plugin:react-hooks/recommended"
     ]

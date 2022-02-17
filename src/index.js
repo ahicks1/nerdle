@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ProvideGameState } from './utils/gameStateTools';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ProvideGameState>
+      <App />
+    </ProvideGameState>
   </React.StrictMode>,
   document.getElementById('root')
 );
