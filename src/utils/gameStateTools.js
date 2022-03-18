@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { parseGameString } from './gameLogic';
 
@@ -127,6 +127,22 @@ export function useGamesList() {
     return [games, addGame, removeGame]
 }
 
+function useCheckForNewGame(addNewGame) {
+    useEffect(() => {
+        const cleanedSearchParams = window.location.search.replace('?', '');
+        const game = new URLSearchParams(cleanedSearchParams).get('newGame');
+        if(game) {
+            try {
+                const parsedGame = parseGameString(game);
+                addNewGame(parsedGame)
+                window.location.search = '';
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }, [addNewGame])
+}
+
 /**
  * Wrapper that handles all state updates related to game status. 
  * Downstream consumers should use proivided hooks to wire into the state 
@@ -138,18 +154,10 @@ export function useGamesList() {
  */
 export function ProvideGameState({children}) {
     const [state, dispatch] = useReducer(currentGameReducer, defaultState);
-    useEffect(() => {
-        const game = new URLSearchParams(window.location.search).get('newGame');
-        if(game) {
-            try {
-                const parsedGame = parseGameString(game);
-                dispatch({type: 'addNewGame', game:parsedGame})
-                window.location.search = '';
-            } catch (e) {
-                console.log(e)
-            }
-        }
-    }, [])
+    const addNewGame = useCallback(
+        parsedGame => dispatch({type: 'addNewGame', game:parsedGame}),
+        [dispatch])
+    useCheckForNewGame(addNewGame)
     return <CurrentGameContext.Provider value={[state, dispatch]}>
         {children}
     </CurrentGameContext.Provider>
