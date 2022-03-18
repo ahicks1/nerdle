@@ -51,7 +51,7 @@ export function createGameString(gameId,word) {
 }
 
 export function getShareGameLink(word) {
-    return `${window.location.href}?newGame=` +
+    return `${window.location.host}/${window.location.pathname}?newGame=` +
     `${createGameString(getNewGameId(),word)}`
 }
 
